@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="defyourtype — security research. HackerOne + X." />
+  <meta name="theme-color" content="#0b0f1a" />
+  <title>defyourtype</title>
+
+  <style>
+    :root{
+      --bg0:#05060a;
+      --bg1:#0b1020;
+      --card:rgba(255,255,255,.06);
+      --stroke:rgba(255,255,255,.12);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.64);
+      --muted2:rgba(255,255,255,.52);
+      --shadow: 0 18px 70px rgba(0,0,0,.55);
+      --shadow2: 0 10px 30px rgba(0,0,0,.35);
+      --r: 22px;
+      --max: 980px;
+
+      --a1:#7c3aed;
+      --a2:#38bdf8;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(900px 520px at 12% -10%, rgba(124,58,237,.28), transparent 58%),
+        radial-gradient(900px 520px at 88% 0%, rgba(56,189,248,.18), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x:hidden;
+    }
+
+    a{color:inherit; text-decoration:none}
+    a:focus-visible, button:focus-visible{
+      outline:2px solid rgba(56,189,248,.7);
+      outline-offset:3px;
+      border-radius:12px;
+    }
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:28px 18px 52px;}
+    .top{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      padding:10px 0 18px;
+    }
+
+    .brand{display:flex; align-items:center; gap:12px}
+    .mark{
+      width:38px; height:38px; border-radius:14px;
+      background:
+        radial-gradient(14px 14px at 30% 30%, rgba(255,255,255,.55), transparent 60%),
+        linear-gradient(135deg, rgba(124,58,237,.95), rgba(56,189,248,.78));
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow: 0 12px 40px rgba(124,58,237,.18), 0 12px 40px rgba(56,189,248,.12);
+    }
+    .brand .name{font-size:14px; font-weight:760; margin:0; letter-spacing:.2px;}
+    .brand .sub{font-size:12px; color:var(--muted2); margin-top:2px; font-weight:560;}
+
+    .links{display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;}
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.18);
+      font-size:13px; font-weight:700;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+    }
+    .pill:hover{ transform: translateY(-1px); background: rgba(255,255,255,.06); border-color: rgba(255,255,255,.18); }
+    .dot{width:8px; height:8px; border-radius:99px; background: rgba(56,189,248,.92); box-shadow: 0 0 0 4px rgba(56,189,248,.12);}
+
+    .hero{
+      position:relative;
+      padding:34px 24px;
+      border-radius: calc(var(--r) + 8px);
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(900px 240px at 25% 0%, rgba(124,58,237,.16), transparent 60%),
+        radial-gradient(900px 240px at 75% 0%, rgba(56,189,248,.10), transparent 60%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 260px at 20% 0%, rgba(124,58,237,.18), transparent 62%),
+        radial-gradient(700px 260px at 80% 0%, rgba(56,189,248,.12), transparent 62%);
+      filter: blur(18px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .hero > *{ position:relative; z-index:1; }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1.25fr .75fr;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width: 880px){
+      .grid{ grid-template-columns: 1fr; }
+      .links{ justify-content:flex-start; }
+    }
+
+    .kicker{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      width:fit-content;
+      font-size:13px;
+      font-weight:750;
+      color: rgba(255,255,255,.82);
+    }
+    .spark{
+      width:10px; height:10px; border-radius:99px;
+      background: linear-gradient(135deg, rgba(124,58,237,.95), rgba(56,189,248,.95));
+      box-shadow: 0 0 0 4px rgba(124,58,237,.10);
+    }
+
+    .title{
+      margin:14px 0 8px;
+      font-size: clamp(30px, 4.8vw, 48px);
+      line-height:1.05;
+      letter-spacing: -0.02em;
+      font-weight: 820;
+      text-transform: lowercase;
+    }
+    .subtitle{
+      margin:0;
+      max-width: 60ch;
+      font-size: 15.5px;
+      line-height: 1.58;
+      color: var(--muted);
+    }
+
+    .ctaRow{display:flex; gap:12px; flex-wrap:wrap; margin-top:18px;}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      padding:12px 14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow2);
+      font-size: 13.5px;
+      font-weight: 760;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      cursor:pointer;
+      user-select:none;
+    }
+    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.22); }
+    .btn.primary{
+      border-color: rgba(56,189,248,.35);
+      background: linear-gradient(135deg, rgba(56,189,248,.16), rgba(124,58,237,.12));
+    }
+    .ico{width:16px; height:16px; opacity:.9;}
+
+    .card{
+      padding:16px;
+      border-radius: var(--r);
+      border:1px solid rgba(255,255,255,.12);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.03));
+      box-shadow: var(--shadow2);
+    }
+    .card h3{
+      margin:0 0 10px;
+      font-size: 12px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.72);
+      font-weight: 820;
+    }
+    .kv{display:flex; flex-direction:column; gap:10px;}
+    .kvRow{
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      padding:10px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.03);
+    }
+    .kvRow strong{font-size:13px; font-weight:800;}
+    .kvRow span{font-size:13px; color:var(--muted); text-align:right; font-weight:650;}
+
+    .footer{
+      margin-top:18px;
+      padding:12px 2px 0;
+      color: rgba(255,255,255,.52);
+      font-size: 12.5px;
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+
+    .toast{
+      position:fixed;
+      left:50%; bottom:24px;
+      transform: translateX(-50%);
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.55);
+      color: rgba(255,255,255,.9);
+      box-shadow: 0 18px 70px rgba(0,0,0,.55);
+      backdrop-filter: blur(10px);
+      font-size: 13px;
+      font-weight: 760;
+      opacity:0;
+      pointer-events:none;
+      transition: opacity .18s ease, transform .18s ease;
+      z-index: 10;
+      white-space: nowrap;
+      max-width: calc(100vw - 32px);
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .toast.show{ opacity:1; transform: translateX(-50%) translateY(-2px); }
+
+    @media (prefers-reduced-motion: reduce){
+      *{transition:none !important}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header class="top" aria-label="Header">
+      <div class="brand" aria-label="Site identity">
+        <div class="mark" aria-hidden="true"></div>
+        <div>
+          <div class="name">defyourtype</div>
+          <div class="sub">security research</div>
+        </div>
+      </div>
+
+      <nav class="links" aria-label="Links">
+        <a class="pill" href="https://hackerone.com/defyourtype" target="_blank" rel="noopener">
+          <span class="dot" aria-hidden="true"></span>
+          HackerOne
+        </a>
+        <a class="pill" href="https://x.com/defyourtype_" target="_blank" rel="noopener">
+          <span class="dot" style="background:rgba(124,58,237,.92); box-shadow:0 0 0 4px rgba(124,58,237,.12);" aria-hidden="true"></span>
+          X
+        </a>
+      </nav>
+    </header>
+
+    <main class="hero" aria-label="Main">
+      <div class="grid">
+        <section aria-label="Intro">
+          <div class="kicker"><span class="spark" aria-hidden="true"></span>independent</div>
+          <h1 class="title">defyourtype</h1>
+          <p class="subtitle">
+            Security research and bug bounty work. For private program invitations or anything sensitive,
+            email me directly.
+          </p>
+
+          <div class="ctaRow" aria-label="Actions">
+            <a class="btn primary" href="https://hackerone.com/defyourtype" target="_blank" rel="noopener">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M5 7.5c0-1.38 1.12-2.5 2.5-2.5h9C17.88 5 19 6.12 19 7.5v9c0 1.38-1.12 2.5-2.5 2.5h-9C6.12 19 5 17.88 5 16.5v-9Z" stroke="currentColor" stroke-width="2" opacity=".9"/>
+                <path d="M9 8.5v7M15 8.5v7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              HackerOne
+            </a>
+
+            <a class="btn" href="https://x.com/defyourtype_" target="_blank" rel="noopener">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M14.2 10.2 21 3h-1.7l-5.8 6.2L8.9 3H3l7.1 10-7.1 8h1.7l6.1-6.6 4.7 6.6H21l-6.8-10.8Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round" opacity=".9"/>
+              </svg>
+              X
+            </a>
+
+            <button class="btn" id="copyEmailBtn" type="button">
+              <svg class="ico" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="2" opacity=".9"/>
+                <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+              </svg>
+              Copy email
+            </button>
+          </div>
+        </section>
+
+        <aside class="card" aria-label="Details">
+          <h3>Contact</h3>
+          <div class="kv" role="list">
+            <div class="kvRow" role="listitem">
+              <strong>Email</strong>
+              <span id="emailText">defyourtype@wearehackerone.com</span>
+            </div>
+            <div class="kvRow" role="listitem">
+              <strong>HackerOne</strong>
+              <span>hackerone.com/defyourtype</span>
+            </div>
+            <div class="kvRow" role="listitem">
+              <strong>X</strong>
+              <span>@defyourtype_</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </main>
+
+    <footer class="footer" aria-label="Footer">
+      <div>© <span id="year"></span> defyourtype</div>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="pill" href="mailto:defyourtype@wearehackerone.com">
+          <span class="dot" style="background:rgba(56,189,248,.92); box-shadow:0 0 0 4px rgba(56,189,248,.10);" aria-hidden="true"></span>
+          Email
+        </a>
+        <a class="pill" href="https://hackerone.com/defyourtype" target="_blank" rel="noopener">
+          <span class="dot" style="background:rgba(34,197,94,.92); box-shadow:0 0 0 4px rgba(34,197,94,.10);" aria-hidden="true"></span>
+          HackerOne
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const email = "defyourtype@wearehackerone.com";
+    const toast = document.getElementById("toast");
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => toast.classList.remove("show"), 1200);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied");
+      }catch{
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.focus(); ta.select();
+        try{ document.execCommand("copy"); showToast("Copied"); }
+        catch{ showToast("Copy failed"); }
+        document.body.removeChild(ta);
+      }
+    }
+
+    document.getElementById("copyEmailBtn").addEventListener("click", () => copyText(email));
+  </script>
+</body>
+</html>

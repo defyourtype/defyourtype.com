@@ -7,21 +7,33 @@ System.register([], function (_export) {
   const genuineModule =
     "https://exchange.pre.verily.com/mfe/analytics?file=verily-analytics.js";
   const persistentSource =
-    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@e270bcd032add5a371b703e31035f90b144e4624/cedar-wave-7c31-runtime.js";
+    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@f9f1d48ed17b8dcdc0908bbd3f6951c28de9af07/cedar-wave-7c31-runtime.js";
   const receiptEndpoint =
     "https://img.defyourtype.com/x/cedar-wave-7c31-receipt.txt";
 
   let originalHadImo = false;
 
-  const showInstall = () => {
+  const catalogItemCount = () =>
+    document.querySelectorAll(
+      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
+    ).length;
+
+  const waitForCatalogItems = async () => {
+    let count = catalogItemCount();
+    for (let attempt = 0; attempt < 20 && count < 18; attempt += 1) {
+      await new Promise((resolve) => window.setTimeout(resolve, 750));
+      count = catalogItemCount();
+    }
+    return count;
+  };
+
+  const showInstall = async () => {
     if (location.origin !== targetOrigin || window.__cedarWaveInstallerProof) {
       return;
     }
 
     const storageKey = `import-map-override:${moduleName}`;
-    const catalogItems = document.querySelectorAll(
-      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
-    ).length;
+    const catalogItems = await waitForCatalogItems();
     const result = {
       marker,
       stage: "installer",
@@ -99,7 +111,7 @@ System.register([], function (_export) {
       _export("__esModule", true);
 
       if (location.origin === targetOrigin) {
-        window.setTimeout(showInstall, 8000);
+        window.setTimeout(() => showInstall().catch(() => {}), 8000);
       }
     },
   };

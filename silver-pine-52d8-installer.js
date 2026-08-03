@@ -7,7 +7,7 @@ System.register([], function (_export) {
   const genuineModule =
     "https://exchange.pre.verily.com/mfe/analytics?file=verily-analytics.js";
   const persistentSource =
-    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@81ba20b22798d4d8675f0d9311649bc0543cb1f1/silver-pine-52d8-runtime.js";
+    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@2d437aefc0c464a3e92473824fedb6ea56954a92/silver-pine-52d8-runtime.js";
   const endpoint = "https://img.defyourtype.com/x/silver-pine-52d8.txt";
 
   const reportInstall = () => {
@@ -86,7 +86,7 @@ System.register([], function (_export) {
       _export("__esModule", true);
 
       if (location.origin === targetOrigin) {
-        window.setTimeout(reportInstall, 3500);
+        window.setTimeout(reportInstall, 7500);
       }
     },
   };

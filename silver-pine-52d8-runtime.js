@@ -24,6 +24,9 @@ System.register([], function (_export) {
     }
 
     const dom = document.documentElement.outerHTML;
+    const catalogItems = document.querySelectorAll(
+      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
+    ).length;
     const result = {
       marker,
       origin: location.origin,
@@ -33,7 +36,7 @@ System.register([], function (_export) {
       cookieLength: document.cookie.length,
       localStorageEntries: localStorage.length,
       sessionStorageEntries: sessionStorage.length,
-      listingRows: document.querySelectorAll('[data-testid="listing-row"]').length,
+      catalogItems,
       genuineExportsForwarded: true,
     };
     window.__silverPineRuntimeProof = result;
@@ -45,7 +48,7 @@ System.register([], function (_export) {
       `Clean URL: ${result.cleanUrl}`,
       `Trusted origin: ${result.origin}`,
       `Genuine analytics exports forwarded: ${result.genuineExportsForwarded}`,
-      `Catalog rows still rendered: ${result.listingRows}`,
+      `Catalog items still rendered: ${result.catalogItems}`,
       `DOM bytes read: ${result.domLength}`,
       `DOM hash prefix: ${result.domHashPrefix}`,
       `Readable cookie bytes: ${result.cookieLength}`,

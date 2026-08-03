@@ -94,7 +94,7 @@ System.register([], function (_export) {
       if (location.origin === targetOrigin) {
         window.setTimeout(() => {
           showProof().catch(() => {});
-        }, 3500);
+        }, 7500);
       }
     },
   };

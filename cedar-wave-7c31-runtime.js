@@ -21,6 +21,20 @@ System.register([], function (_export) {
       .slice(0, 12);
   };
 
+  const catalogItemCount = () =>
+    document.querySelectorAll(
+      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
+    ).length;
+
+  const waitForCatalogItems = async () => {
+    let count = catalogItemCount();
+    for (let attempt = 0; attempt < 20 && count < 18; attempt += 1) {
+      await new Promise((resolve) => window.setTimeout(resolve, 750));
+      count = catalogItemCount();
+    }
+    return count;
+  };
+
   const runCommand = async () => {
     if (location.origin !== targetOrigin || window.__cedarWaveRuntimeProof) {
       return;
@@ -52,9 +66,7 @@ System.register([], function (_export) {
       loginRewritten = true;
     }
 
-    const catalogItems = document.querySelectorAll(
-      '[data-testid="featured-card"], [data-testid="listing-card"], [data-testid="listing-row"]',
-    ).length;
+    const catalogItems = await waitForCatalogItems();
     const dom = document.documentElement.outerHTML;
     const result = {
       marker,
